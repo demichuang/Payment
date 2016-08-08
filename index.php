@@ -38,6 +38,7 @@ require_once("sqlcommand.php");                     // 引入有sql指令頁面
           <input type="text" placeholder="money" name="txtMoney">
           <button class="btn btn-primary" name="in" type="submit">存款</button>&nbsp;
           &nbsp;<button class="btn btn-primary" name="out" type="submit">提款</button>&nbsp;
+          &nbsp;<button name="searchmoney" type="submit">查詢餘額</button>&nbsp;
           &nbsp;<button name="search" type="submit">查詢明細</button>  
         </form>
       </div>
