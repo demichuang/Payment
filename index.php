@@ -2,6 +2,27 @@
 header('Content-type: text/html; charset=utf-8');   //使用萬用字元碼utf-8
 require_once("connect_db.php");                     // 連結資料庫bank
 
+$name = $_POST['txtAccountname'];     // 輸入帳戶名
+$money = $_POST['txtMoney'];          // 輸入金額
+  
+$cmd="SELECT * FROM `user` 
+      WHERE `username` ='$name'";       
+$result=$db->query($cmd);               
+$row=$result->fetch();                // 查詢輸入的帳戶                
+
+
+if (isset($_POST["in"]))              // 點選"存款按鈕"     
+{
+	$total =$row['money']+$money;         // 金額=帳戶金額+存入金額                                
+	
+	$cmd="UPDATE `user` 
+	      SET `money`='$total'                      
+        WHERE `username` ='$name'";
+  $moneyin=$db->query($cmd);            // 更新帳戶金額 
+  
+  $msg="存款成功，帳戶金額：".$total;   // 顯示存款成功訊息、帳戶金額 
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -42,6 +63,8 @@ require_once("connect_db.php");                     // 連結資料庫bank
       </div>
     </div>
     &nbsp;&nbsp;
+    
+    <h4 class="text-center  wowload fadeInUp"><?php echo $msg?><h4>       <!-- 訊息顯示 -->
    
   </div>
 </div>
