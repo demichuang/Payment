@@ -23,6 +23,24 @@ if (isset($_POST["in"]))              // 點選"存款按鈕"
   $msg="存款成功，帳戶金額：".$total;   // 顯示存款成功訊息、帳戶金額 
 }
 
+
+if (isset($_POST["out"]))             // 點選"提款按鈕"          
+{
+	if($row['money']>=$money)             // 如果帳戶金額>提款金額
+	{
+  	$total =$row['money']-$money;       // 金額=帳戶金額-提出金額                                  
+  	
+  	$cmd="UPDATE `user` 
+  	      SET `money`='$total'                      
+          WHERE `username` ='$name'";
+    $moneyout=$db->query($cmd);         // 更新帳戶金額 
+    
+    $msg="提款成功，帳戶金額：".$total; // 顯示提款成功訊息、帳戶金額 
+	}
+	else
+	  $msg="提款失敗，金額不足，帳戶金額：".$row['money'];   // 顯示提款失敗訊息、帳戶金額 
+}
+
 ?>
 
 <!DOCTYPE html>
