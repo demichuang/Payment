@@ -16,29 +16,33 @@ class sqlcommand extends connect_db
     // 點選"存款按鈕"
     function moneyIn($name, $money)
     {
+        try{
+            $this->db->beginTransaction();
+            $sql = "SELECT * FROM `user` WHERE `username` = :name FOR UPDATE";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->execute();
+            $row = $stmt->fetch();
 
-        $this->db->beginTransaction();
-        $sql = "SELECT * FROM `user` WHERE `username` = :name FOR UPDATE";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':name', $name);
-        $stmt->execute();
-        $row = $stmt->fetch();
-        sleep(5);
+            $sql = "UPDATE `user` SET `money` = :initMoney + $money WHERE `username` = :name";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':initMoney', $row['money']);
+            $stmt->bindParam(':name', $name);
+            $stmt->execute();                         // 更新帳戶金額
 
-        $sql = "UPDATE `user` SET `money` = :initMoney + $money WHERE `username` = :name";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':initMoney', $row['money']);
-        $stmt->bindParam(':name', $name);
-        $stmt->execute();                         // 更新帳戶金額
+            $stmt = $this->db->prepare(
+                "INSERT `record`(`username`, `action`, `money`, `balance`) VALUES (:name, '存入', :money, :balance + $money)");
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':money', $money);
+            $stmt->bindParam(':balance', $row['money']);
+            $stmt->execute();                         // 更新帳戶紀錄
+            $msg = "存款成功，帳戶金額：" . ($row['money'] + $money);   // 顯示存款成功訊息、帳戶金額
 
-        $stmt = $this->db->prepare(
-            "INSERT `record`(`username`, `action`, `money`, `balance`) VALUES (:name, '存入', :money, :balance + $money)");
-        $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':money', $money);
-        $stmt->bindParam(':balance', $row['money']);
-        $stmt->execute();                         // 更新帳戶紀錄
-        $msg = "存款成功，帳戶金額：" . ($row['money'] + $money);   // 顯示存款成功訊息、帳戶金額
-        $this->db->commit();
+            $this->db->commit();
+        } catch (Exception $err) {
+            $this->db->rollBack();
+            $msg = $err->getMessage();
+        }
 
         return $msg;
     }
@@ -46,32 +50,35 @@ class sqlcommand extends connect_db
     // 點選"提款按鈕"
     function moneyOut($name, $money)
     {
-        $this->db->beginTransaction();
-        $stmt = $this->db->prepare("SELECT * FROM `user` WHERE `username` = :name FOR UPDATE");
-        $stmt->bindParam(':name', $name);
-        $stmt->execute();
-        $row = $stmt->fetch();
-        sleep(5);
-
-        if ($row['money'] >= $money) {             // 如果帳戶金額 >= 提款金額
-
-            $stmt = $this->db->prepare("UPDATE `user` SET `money`= :initMoney - $money WHERE `username` = :name");
-            $stmt->bindParam(':initMoney', $row['money']);
+        try{
+            $this->db->beginTransaction();
+            $stmt = $this->db->prepare("SELECT * FROM `user` WHERE `username` = :name FOR UPDATE");
             $stmt->bindParam(':name', $name);
-            $stmt->execute();                      // 更新帳戶金額
+            $stmt->execute();
+            $row = $stmt->fetch();
 
-            $stmt = $this->db->prepare(
-                "INSERT `record`(`username`, `action`, `money`, `balance`)  VALUES (:name, '匯出', :money, :balance - $money)");
-            $stmt->bindParam(':name', $name);
-            $stmt->bindParam(':money', $money);
-            $stmt->bindParam(':balance', $row['money']);
-            $stmt->execute();                      // 更新帳戶紀錄
-            $msg = "提款成功，帳戶金額：" . ($row['money'] - $money);// 顯示提款成功訊息、帳戶金額
-        } else {                                     // 如果帳戶金額 < 提款金額
-            $msg = "提款失敗，金額不足，帳戶金額：" . $row['money'];    // 顯示提款失敗訊息、帳戶金額
+                if ($row['money'] >= $money) {             // 如果帳戶金額 >= 提款金額
+                    $stmt = $this->db->prepare("UPDATE `user` SET `money`= :initMoney - $money WHERE `username` = :name");
+                    $stmt->bindParam(':initMoney', $row['money']);
+                    $stmt->bindParam(':name', $name);
+                    $stmt->execute();                      // 更新帳戶金額
+
+                    $stmt = $this->db->prepare(
+                        "INSERT `record`(`username`, `action`, `money`, `balance`)  VALUES (:name, '匯出', :money, :balance - $money)");
+                    $stmt->bindParam(':name', $name);
+                    $stmt->bindParam(':money', $money);
+                    $stmt->bindParam(':balance', $row['money']);
+                    $stmt->execute();                      // 更新帳戶紀錄
+                    $msg = "提款成功，帳戶金額：" . ($row['money'] - $money);// 顯示提款成功訊息、帳戶金額
+                } else {                                     // 如果帳戶金額 < 提款金額
+                    $msg = "提款失敗，金額不足，帳戶金額：" . $row['money'];    // 顯示提款失敗訊息、帳戶金額
+                }
+
+                $this->db->commit();
+        } catch (Exception $err) {
+            $this->db->rollBack();
+            $msg = $err->getMessage();
         }
-
-        $this->db->commit();
 
         return $msg;
     }
