@@ -14,24 +14,26 @@ class indexController extends Controller
         $name = $_POST['txtAccountname'];       // 輸入帳戶名
         $money = $_POST['txtMoney'];            // 輸入金額
 
-        if (isset($_POST["in"])) {
-            $msg = $this->model("sqlcommand")->moneyIn($name, $money);
-            $this->view("index", $msg, "");
-        }
+        $num = $this->model("sqlcommand")->checkUser($name);
 
-        if (isset($_POST["out"])) {
-            $msg = $this->model("sqlcommand")->moneyOut($name, $money);
-            $this->view("index", $msg, "");
-        }
-
-        if (isset($_POST["searchmoney"])) {
-            $msg = $this->model("sqlcommand")->moneySearch($name);
-            $this->view("index", $msg, "");
-        }
-
-        if (isset($_POST["searchdetail"])) {
-            $msg = $this->model("sqlcommand")->detailSearch($name);
-            $this->view("index", $msg[0], $msg[1]);
+        if ($num == 1) {
+            if (isset($_POST["in"]) && $money > 0) {
+                $msg = $this->model("sqlcommand")->moneyIn($name, $money);
+                $this->view("index", $msg, "");
+            } elseif (isset($_POST["out"]) && $money > 0) {
+                $msg = $this->model("sqlcommand")->moneyOut($name, $money);
+                $this->view("index", $msg, "");
+            } elseif (isset($_POST["searchmoney"])) {
+                $msg = $this->model("sqlcommand")->moneySearch($name);
+                $this->view("index", $msg, "");
+            } elseif (isset($_POST["searchdetail"])) {
+                $msg = $this->model("sqlcommand")->detailSearch($name);
+                $this->view("index", $msg[0], $msg[1]);
+            } else {
+                $this->view("index", "輸入錯誤", "");
+            }
+        } else {
+            $this->view("index", "查無此帳戶", "");
         }
     }
 

@@ -2,6 +2,17 @@
 
 class sqlcommand extends connect_db
 {
+    // 檢查是否有此使用者
+    function checkUser($name)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM `user` WHERE `username` = :name");
+        $stmt->bindParam(':name', $name);
+        $stmt->execute();
+        $num = $stmt->rowCount();
+
+        return $num;
+    }
+
     // 點選"存款按鈕"
     function moneyIn($name, $money)
     {
