@@ -33,9 +33,10 @@ class sqlcommand extends connect_db
         $stmt->execute();                         // 更新帳戶金額
 
         $stmt = $this->db->prepare(
-            "INSERT `record`(`username`, `action`, `money`) VALUES (:name, '存入', :money)");
+            "INSERT `record`(`username`, `action`, `money`, `balance`) VALUES (:name, '存入', :money, :balance)");
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':money', $money);
+        $stmt->bindParam(':balance', $total);
         $stmt->execute();                         // 更新帳戶紀錄
         $msg = "存款成功，帳戶金額：" . $total;   // 顯示存款成功訊息、帳戶金額
         $this->db->commit();
@@ -62,9 +63,10 @@ class sqlcommand extends connect_db
             $stmt->execute();                      // 更新帳戶金額
 
             $stmt = $this->db->prepare(
-                "INSERT `record`(`username`, `action`, `money`)  VALUES (:name, '匯出', :money)");
+                "INSERT `record`(`username`, `action`, `money`, `balance`)  VALUES (:name, '匯出', :money, :balance)");
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':money', $money);
+            $stmt->bindParam(':balance', $total);
             $stmt->execute();                      // 更新帳戶紀錄
             $msg = "提款成功，帳戶金額：" . $total;// 顯示提款成功訊息、帳戶金額
         } else {                                     // 如果帳戶金額 < 提款金額
