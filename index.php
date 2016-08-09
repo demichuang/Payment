@@ -1,7 +1,7 @@
 <?php 
 header('Content-type: text/html; charset=utf-8');   // 使用萬用字元碼utf-8
-require_once("connect_db.php");                     // 連結資料庫bank
 require_once("sqlcommand.php");                     // 引入有sql指令頁面
+
 ?>
 
 <!DOCTYPE html>
@@ -46,20 +46,17 @@ require_once("sqlcommand.php");                     // 引入有sql指令頁面
     &nbsp;&nbsp;
     
     <h4 class="text-center  wowload fadeInUp"><?php echo $msg?><h4>       <!-- 訊息顯示 -->
-    
-<?php
-if (isset($_POST["search"]))
-{
-  echo "<h4 class='text-center'><table>";
-  foreach($row as $values)
-  {  
-    echo "<tr>
-      <td>{$values['action']}</td><td>{$values['moneyaction']}</td>
-    </tr>";                                                               // 顯示帳戶明細資料
-  }
-  echo "</table></h4>";
-}
-?>
+
+    <?php
+    if (isset($_POST["search"])) {
+        echo "<h4 class='text-center'><table>";
+        foreach ($row as $values) {  
+            echo "<tr><td>{$values['action']}</td><td>{$values['moneyaction']}</td></tr>"; // 顯示帳戶明細資料                                                               
+        }
+        echo "</table></h4>";
+    }
+
+    ?>
 
   </div>
 </div>
