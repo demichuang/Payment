@@ -44,7 +44,10 @@
     if ($data2 != "") {
         echo "<h4 class='text-center'><table>";
         foreach ($data2 as $values) {
-            echo "<tr> <td> {$values['action']} </td><td>{$values['money']}</td></tr>"; // 顯示帳戶明細資料
+            echo "<tr> <td> {$values['action']}: </td>
+                       <td> {$values['money']} </td>
+                       <td> (餘額 : </td>
+                       <td> {$values['balance']}) </td> </tr>";    // 顯示帳戶明細資料
         }
         echo "</table></h4>";
     }
