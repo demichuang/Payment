@@ -37,7 +37,7 @@
       &nbsp;&nbsp;
       <?php
       if (!empty($data)) {
-          echo "<h4 class='text-center  wowload fadeInUp'>$data<h4>";       // 訊息顯示
+          echo "<h4 class='text-center  wowload fadeInUp'>$data<h4>";
       }
 
       if (!empty($data2)) {
@@ -46,7 +46,7 @@
               echo "<tr> <td> {$values['action']}: </td>
                          <td> {$values['money']} </td>
                          <td> ( 餘額 : </td>
-                         <td> {$values['balance']}) </td> </tr>";          // 顯示帳戶明細資料
+                         <td> {$values['balance']}) </td> </tr>";
           }
           echo "</table></h4>";
       }
