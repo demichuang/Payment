@@ -6,10 +6,10 @@ class Controller
     {
         require_once "../Payment/models/$model.php";
 
-        return new $model ();
+        return new $model();
     }
 
-    public function view($view, $data = Array(),$data2 = Array(),$data3 = Array(),$data4 = Array())
+    public function view($view, $data = Array(), $data2 = Array())
     {
         require_once "../Payment/views/$view.php";
     }

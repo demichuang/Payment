@@ -46,7 +46,7 @@
         foreach ($data2 as $values) {
             echo "<tr> <td> {$values['action']}: </td>
                        <td> {$values['money']} </td>
-                       <td> (餘額 : </td>
+                       <td> ( 餘額 : </td>
                        <td> {$values['balance']}) </td> </tr>";    // 顯示帳戶明細資料
         }
         echo "</table></h4>";

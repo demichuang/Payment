@@ -13,8 +13,8 @@ class sqlcommand extends connect_db
         return $num;
     }
 
-    // 點選"存款按鈕"
-    function moneyIn($name, $money)
+    // 存款
+    function moneyDeposit($name, $money)
     {
         try{
             $this->db->beginTransaction();
@@ -28,27 +28,27 @@ class sqlcommand extends connect_db
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':initMoney', $row['money']);
             $stmt->bindParam(':name', $name);
-            $stmt->execute();                         // 更新帳戶金額
+            $stmt->execute();                            // 更新帳戶金額
 
-            $stmt = $this->db->prepare(
-                "INSERT `record`(`username`, `action`, `money`, `balance`) VALUES (:name, '存入', :money, :balance + $money)");
+            $stmt = $this->db->prepare("INSERT `record`(`username`, `action`, `money`, `balance`)
+                VALUES (:name, '存入', :money, :balance + $money)");
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':money', $money);
             $stmt->bindParam(':balance', $row['money']);
-            $stmt->execute();                         // 更新帳戶紀錄
+            $stmt->execute();                            // 更新帳戶紀錄
             $msg = "存款成功，帳戶金額：" . ($row['money'] + $money);   // 顯示存款成功訊息、帳戶金額
 
             $this->db->commit();
-        } catch (Exception $err) {
+        } catch (Exception $error) {
             $this->db->rollBack();
-            $msg = $err->getMessage();
+            $msg = $error->getMessage();
         }
 
         return $msg;
     }
 
-    // 點選"提款按鈕"
-    function moneyOut($name, $money)
+    // 提款
+    function moneyWithdraw($name, $money)
     {
         try{
             $this->db->beginTransaction();
@@ -58,53 +58,54 @@ class sqlcommand extends connect_db
             $row = $stmt->fetch();
 
                 if ($row['money'] >= $money) {             // 如果帳戶金額 >= 提款金額
-                    $stmt = $this->db->prepare("UPDATE `user` SET `money`= :initMoney - $money WHERE `username` = :name");
+                    $sql = "UPDATE `user` SET `money`= :initMoney - $money WHERE `username` = :name";
+                    $stmt = $this->db->prepare($sql);
                     $stmt->bindParam(':initMoney', $row['money']);
                     $stmt->bindParam(':name', $name);
                     $stmt->execute();                      // 更新帳戶金額
 
-                    $stmt = $this->db->prepare(
-                        "INSERT `record`(`username`, `action`, `money`, `balance`)  VALUES (:name, '匯出', :money, :balance - $money)");
+                    $stmt = $this->db->prepare("INSERT `record`(`username`, `action`, `money`, `balance`)
+                        VALUES (:name, '匯出', :money, :balance - $money)");
                     $stmt->bindParam(':name', $name);
                     $stmt->bindParam(':money', $money);
                     $stmt->bindParam(':balance', $row['money']);
                     $stmt->execute();                      // 更新帳戶紀錄
-                    $msg = "提款成功，帳戶金額：" . ($row['money'] - $money);// 顯示提款成功訊息、帳戶金額
-                } else {                                     // 如果帳戶金額 < 提款金額
-                    $msg = "提款失敗，金額不足，帳戶金額：" . $row['money'];    // 顯示提款失敗訊息、帳戶金額
+                    $msg = "提款成功，帳戶金額：" . ($row['money'] - $money);
+                } else {                                   // 如果帳戶金額 < 提款金額
+                    $msg = "提款失敗，金額不足，帳戶金額：" . $row['money'];
                 }
 
                 $this->db->commit();
-        } catch (Exception $err) {
+        } catch (Exception $error) {
             $this->db->rollBack();
-            $msg = $err->getMessage();
+            $msg = $error->getMessage();
         }
 
         return $msg;
     }
 
-    // 點選"查詢餘額按鈕"
+    // 查詢餘額
     function moneySearch($name)
     {
         $stmt = $this->db->prepare("SELECT * FROM `user` WHERE `username` = :name" );
         $stmt->bindParam(':name', $name);
         $stmt->execute();
         $row = $stmt->fetch();                     // 搜尋資料
-        $msg = "帳戶餘額:" . $row['money'];        // 顯示帳戶餘額
+        $msg = "帳戶餘額:" . $row['money'];
 
         return $msg;
     }
 
-    // 點選"查詢明細按鈕"
+    // 查詢明細
     function detailSearch($name)
     {
         $stmt = $this->db->prepare("SELECT * FROM `record` WHERE `username` = :name" );
         $stmt->bindParam(':name', $name);
         $stmt->execute();
         $row = $stmt->fetchAll();                   // 搜尋資料
-        $msg = "帳戶明細";                          // 顯示帳戶明細
+        $msg = "帳戶明細";
 
-        return [$msg,$row];
+        return [$msg, $row];
     }
 
 }
