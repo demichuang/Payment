@@ -11,8 +11,8 @@ class IndexController extends Controller
     // 點選"按鈕"
     public function getButton()
     {
-        $name = $_POST['txtAccountname'];       // 輸入帳戶名
-        $money = $_POST['txtMoney'];            // 輸入金額
+        $name = $_POST['txtAccountname'];
+        $money = $_POST['txtMoney'];
 
         $num = $this->model("SqlCommand")->checkUser($name);
 
@@ -42,5 +42,4 @@ class IndexController extends Controller
             $this->view("index", "查無此帳戶");
         }
     }
-
 }
