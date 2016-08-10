@@ -16,7 +16,7 @@ class SqlCommand extends Connect
     // 存款
     function moneyDeposit($name, $money)
     {
-        try{
+        try {
             $this->db->beginTransaction();
             $sql = "SELECT * FROM `user` WHERE `username` = :name FOR UPDATE";
             $stmt = $this->db->prepare($sql);
@@ -50,7 +50,7 @@ class SqlCommand extends Connect
     // 提款
     function moneyWithdraw($name, $money)
     {
-        try{
+        try {
             $this->db->beginTransaction();
             $stmt = $this->db->prepare("SELECT * FROM `user` WHERE `username` = :name FOR UPDATE");
             $stmt->bindParam(':name', $name);
