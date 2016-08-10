@@ -1,6 +1,6 @@
 <?php
 
-class sqlcommand extends connect_db
+class SqlCommand extends Connect
 {
     // 檢查是否有此使用者
     function checkUser($name)

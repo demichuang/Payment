@@ -1,6 +1,6 @@
 <?php
 
-class indexController extends Controller
+class IndexController extends Controller
 {
     // 到首頁
     public function index()

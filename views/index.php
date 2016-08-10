@@ -26,7 +26,7 @@
     <h2 class="text-center  wowload fadeInUp">Bank</h2>
     <div class="row wowload fadeInLeftBig">
       <div class="col-sm-6 col-sm-offset-3 col-xs-12">
-        <form method="post" action="/Payment/index/getbutton">
+        <form method="post" action="/Payment/Index/getButton">
           <input type="text" placeholder="accountname" name="txtAccountname" required>
           <input type="text" placeholder="money" name="txtMoney">
           <button class="btn btn-primary" name="in" type="submit">存款</button>&nbsp;
