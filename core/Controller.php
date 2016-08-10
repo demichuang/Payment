@@ -13,5 +13,4 @@ class Controller
     {
         require_once "../Payment/views/$view.php";
     }
-
 }
