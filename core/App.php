@@ -22,8 +22,8 @@ class App
 
         unset($url[0]);
         unset($url[1]);
-        $params = $url ? array_values($url) : Array();
-        call_user_func_array(Array($controller, $methodName), $params);
+        $params = $url ? array_values($url) : array();
+        call_user_func_array(array($controller, $methodName), $params);
     }
 
     public function parseUrl()
