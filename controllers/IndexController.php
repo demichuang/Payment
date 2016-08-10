@@ -2,7 +2,7 @@
 
 class IndexController extends Controller
 {
-    // 到首頁
+    // 轉入首頁
     public function index()
     {
         $this->view("index");
