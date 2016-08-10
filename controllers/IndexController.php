@@ -9,7 +9,7 @@ class IndexController extends Controller
     }
 
     // 點選"按鈕"
-    public function getbutton()
+    public function getButton()
     {
         $name = $_POST['txtAccountname'];       // 輸入帳戶名
         $money = $_POST['txtMoney'];            // 輸入金額
