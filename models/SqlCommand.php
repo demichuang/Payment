@@ -18,7 +18,7 @@ class SqlCommand extends Connect
     {
         try {
             $this->db->beginTransaction();
-            $sql = "SELECT * FROM `user` WHERE `username` = :name FOR UPDATE";
+            $sql = "SELECT * FROM `user` WHERE `username` = :name LOCK IN SHARE MODE";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->execute();
@@ -51,7 +51,7 @@ class SqlCommand extends Connect
     {
         try {
             $this->db->beginTransaction();
-            $stmt = $this->db->prepare("SELECT * FROM `user` WHERE `username` = :name FOR UPDATE");
+            $stmt = $this->db->prepare("SELECT * FROM `user` WHERE `username` = :name LOCK IN SHARE MODE");
             $stmt->bindParam(':name', $name);
             $stmt->execute();
             $row = $stmt->fetch();
