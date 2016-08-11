@@ -17,34 +17,31 @@ class SqlCommand extends Connect
     function moneyDeposit($name, $money)
     {
         try {
+            $this->db->beginTransaction();
+
             if ($money <= 0) {
                 throw new Exception("輸入錯誤");
             }
 
-            $this->db->beginTransaction();
-            $sql = "SELECT * FROM `user` WHERE `username` = :name LOCK IN SHARE MODE";
+            $sql = "SELECT `money` FROM `user` WHERE `username` = :name LOCK IN SHARE MODE";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->execute();
-            $row = $stmt->fetch();
+            $initMoney = $stmt->fetchColumn();
 
-            $sql = "UPDATE `user` SET `money` = :initMoney + $money WHERE `username` = :name";
+            $sql = "UPDATE `user` SET `money` = `money` + $money WHERE `username` = :name";
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':initMoney', $row['money']);
             $stmt->bindParam(':name', $name);
             $stmt->execute();
-
-            date_default_timezone_set('Asia/Taipei');
-            $time = date("Y-m-d H:i:s");
 
             $stmt = $this->db->prepare("INSERT `record`(`username`, `action`, `money`, `balance`, `time`)
                 VALUES (:name, '存入', :money, :balance + $money, :time)");
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':money', $money);
-            $stmt->bindParam(':balance', $row['money']);
+            $stmt->bindParam(':balance', $initMoney);
             $stmt->bindParam(':time', $time);
             $stmt->execute();
-            $msg = "存款成功，帳戶金額：" . ($row['money'] + $money);
+            $msg = "存款成功，帳戶金額：" . ($initMoney + $money);
             $this->db->commit();
         } catch (Exception $error) {
             $this->db->rollBack();
@@ -58,39 +55,37 @@ class SqlCommand extends Connect
     function moneyWithdraw($name, $money)
     {
         try {
+            $this->db->beginTransaction();
+
             if ($money <= 0) {
                 throw new Exception("輸入錯誤");
             }
 
-            $this->db->beginTransaction();
-            $stmt = $this->db->prepare("SELECT * FROM `user` WHERE `username` = :name LOCK IN SHARE MODE");
+            $stmt = $this->db->prepare("SELECT `money` FROM `user` WHERE `username` = :name LOCK IN SHARE MODE");
             $stmt->bindParam(':name', $name);
             $stmt->execute();
-            $row = $stmt->fetch();
+            $initMoney = $stmt->fetchColumn();
 
-            // 如果帳戶金額 >= 提款金額
-            if ($row['money'] >= $money) {
-                $sql = "UPDATE `user` SET `money`= :initMoney - $money WHERE `username` = :name";
-                $stmt = $this->db->prepare($sql);
-                $stmt->bindParam(':initMoney', $row['money']);
-                $stmt->bindParam(':name', $name);
-                $stmt->execute();
-
-                date_default_timezone_set('Asia/Taipei');
-                $time = date("Y-m-d H:i:s");
-
-                $stmt = $this->db->prepare("INSERT `record`(`username`, `action`, `money`, `balance`, `time`)
-                    VALUES (:name, '匯出', :money, :balance - $money, :time)");
-                $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':money', $money);
-                $stmt->bindParam(':balance', $row['money']);
-                $stmt->bindParam(':time', $time);
-                $stmt->execute();
-                $msg = "提款成功，帳戶金額：" . ($row['money'] - $money);
-            } else {
-                $msg = "提款失敗，金額不足，帳戶金額：" . $row['money'];
+            if ($money > $initMoney) {
+                throw new Exception("提款失敗，金額不足，帳戶金額：" . $initMoney);
             }
 
+            $sql = "UPDATE `user` SET `money`= `money` - $money WHERE `username` = :name";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->execute();
+
+            date_default_timezone_set('Asia/Taipei');
+            $time = date("Y-m-d H:i:s");
+
+            $stmt = $this->db->prepare("INSERT `record`(`username`, `action`, `money`, `balance`, `time`)
+                VALUES (:name, '匯出', :money, :balance - $money, :time)");
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':money', $money);
+            $stmt->bindParam(':balance', $initMoney);
+            $stmt->bindParam(':time', $time);
+            $stmt->execute();
+            $msg = "提款成功，帳戶金額：" . ($initMoney - $money);
             $this->db->commit();
         } catch (Exception $error) {
             $this->db->rollBack();
