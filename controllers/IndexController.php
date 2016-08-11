@@ -27,12 +27,12 @@ class IndexController extends Controller
                 $this->view("index", $msg);
             }
 
-            if (isset($_POST["searchmoney"])) {
+            if (isset($_POST["searchMoney"])) {
                 $msg = $this->model("SqlCommand")->moneySearch($name);
                 $this->view("index", $msg);
             }
 
-            if (isset($_POST["searchdetail"])) {
+            if (isset($_POST["searchDetail"])) {
                 $msg = $this->model("SqlCommand")->detailSearch($name);
                 $this->view("index", $msg[0], $msg[1]);
             } else {

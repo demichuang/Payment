@@ -29,18 +29,18 @@
             <input type="text" placeholder="money" name="txtMoney">
             <button class="btn btn-primary" name="in" type="submit">存款</button>&nbsp;
             &nbsp;<button class="btn btn-primary" name="out" type="submit">提款</button>&nbsp;
-            &nbsp;<button name="searchmoney" type="submit">查詢餘額</button>&nbsp;
-            &nbsp;<button name="searchdetail" type="submit">查詢明細</button>
+            &nbsp;<button name="searchMoney" type="submit">查詢餘額</button>&nbsp;
+            &nbsp;<button name="searchDetail" type="submit">查詢明細</button>
           </form>
         </div>
       </div>
       &nbsp;&nbsp;
       <?php
-      if (!empty($data)) {
+      if ($data) {
           echo "<h4 class='text-center  wowload fadeInUp'>$data<h4>";
       }
 
-      if (!empty($data2)) {
+      if ($data2) {
           echo "<h4 class='text-center'><table>";
           foreach ($data2 as $values) {
               echo "<tr> <td> {$values['action']}: </td>
