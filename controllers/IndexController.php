@@ -16,30 +16,28 @@ class IndexController extends Controller
 
         $num = $this->model("SqlCommand")->checkUser($name);
 
-        if ($num == 1) {
-            if (isset($_POST["in"]) && $money > 0) {
-                $msg = $this->model("SqlCommand")->moneyDeposit($name, $money);
-                $this->view("index", $msg);
-            }
-
-            if (isset($_POST["out"]) && $money > 0) {
-                $msg = $this->model("SqlCommand")->moneyWithdraw($name, $money);
-                $this->view("index", $msg);
-            }
-
-            if (isset($_POST["searchMoney"])) {
-                $result = $this->model("SqlCommand")->moneySearch($name);
-                $this->view("index", "帳戶餘額:" . $result);
-            }
-
-            if (isset($_POST["searchDetail"])) {
-                $row = $this->model("SqlCommand")->detailSearch($name);
-                $this->view("index", "帳戶明細", $row);
-            } else {
-                $this->view("index", "輸入錯誤");
-            }
-        } else {
+        if (!$num) {
             $this->view("index", "查無此帳戶");
+        }
+
+        if (isset($_POST["in"])) {
+            $msg = $this->model("SqlCommand")->moneyDeposit($name, $money);
+            $this->view("index", $msg);
+        }
+
+        if (isset($_POST["out"])) {
+            $msg = $this->model("SqlCommand")->moneyWithdraw($name, $money);
+            $this->view("index", $msg);
+        }
+
+        if (isset($_POST["searchMoney"])) {
+            $result = $this->model("SqlCommand")->moneySearch($name);
+            $this->view("index", "帳戶餘額:" . $result);
+        }
+
+        if (isset($_POST["searchDetail"])) {
+            $row = $this->model("SqlCommand")->detailSearch($name);
+            $this->view("index", "帳戶明細", $row);
         }
     }
 }

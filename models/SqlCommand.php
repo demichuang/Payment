@@ -17,6 +17,10 @@ class SqlCommand extends Connect
     function moneyDeposit($name, $money)
     {
         try {
+            if ($money <= 0) {
+                throw new Exception("輸入錯誤");
+            }
+
             $this->db->beginTransaction();
             $sql = "SELECT * FROM `user` WHERE `username` = :name LOCK IN SHARE MODE";
             $stmt = $this->db->prepare($sql);
@@ -54,6 +58,10 @@ class SqlCommand extends Connect
     function moneyWithdraw($name, $money)
     {
         try {
+            if ($money <= 0) {
+                throw new Exception("輸入錯誤");
+            }
+
             $this->db->beginTransaction();
             $stmt = $this->db->prepare("SELECT * FROM `user` WHERE `username` = :name LOCK IN SHARE MODE");
             $stmt->bindParam(':name', $name);
