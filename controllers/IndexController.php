@@ -28,13 +28,13 @@ class IndexController extends Controller
             }
 
             if (isset($_POST["searchMoney"])) {
-                $msg = $this->model("SqlCommand")->moneySearch($name);
-                $this->view("index", $msg);
+                $result = $this->model("SqlCommand")->moneySearch($name);
+                $this->view("index", "帳戶餘額:" . $result);
             }
 
             if (isset($_POST["searchDetail"])) {
-                $msg = $this->model("SqlCommand")->detailSearch($name);
-                $this->view("index", $msg[0], $msg[1]);
+                $row = $this->model("SqlCommand")->detailSearch($name);
+                $this->view("index", "帳戶明細", $row);
             } else {
                 $this->view("index", "輸入錯誤");
             }

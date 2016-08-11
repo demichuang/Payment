@@ -95,13 +95,12 @@ class SqlCommand extends Connect
     // 查詢餘額
     function moneySearch($name)
     {
-        $stmt = $this->db->prepare("SELECT * FROM `user` WHERE `username` = :name" );
+        $stmt = $this->db->prepare("SELECT `money` FROM `user` WHERE `username` = :name" );
         $stmt->bindParam(':name', $name);
         $stmt->execute();
-        $row = $stmt->fetch();
-        $msg = "帳戶餘額:" . $row['money'];
+        $result = $stmt->fetchColumn();
 
-        return $msg;
+        return $result;
     }
 
     // 查詢明細
@@ -111,8 +110,7 @@ class SqlCommand extends Connect
         $stmt->bindParam(':name', $name);
         $stmt->execute();
         $row = $stmt->fetchAll();
-        $msg = "帳戶明細";
 
-        return [$msg, $row];
+        return $row;
     }
 }
