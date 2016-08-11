@@ -30,11 +30,15 @@ class SqlCommand extends Connect
             $stmt->bindParam(':name', $name);
             $stmt->execute();
 
-            $stmt = $this->db->prepare("INSERT `record`(`username`, `action`, `money`, `balance`)
-                VALUES (:name, '存入', :money, :balance + $money)");
+            date_default_timezone_set('Asia/Taipei');
+            $time = date("Y-m-d H:i:s");
+
+            $stmt = $this->db->prepare("INSERT `record`(`username`, `action`, `money`, `balance`, `time`)
+                VALUES (:name, '存入', :money, :balance + $money, :time)");
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':money', $money);
             $stmt->bindParam(':balance', $row['money']);
+            $stmt->bindParam(':time', $time);
             $stmt->execute();
             $msg = "存款成功，帳戶金額：" . ($row['money'] + $money);
             $this->db->commit();
@@ -64,11 +68,15 @@ class SqlCommand extends Connect
                 $stmt->bindParam(':name', $name);
                 $stmt->execute();
 
-                $stmt = $this->db->prepare("INSERT `record`(`username`, `action`, `money`, `balance`)
-                    VALUES (:name, '匯出', :money, :balance - $money)");
+                date_default_timezone_set('Asia/Taipei');
+                $time = date("Y-m-d H:i:s");
+
+                $stmt = $this->db->prepare("INSERT `record`(`username`, `action`, `money`, `balance`, `time`)
+                    VALUES (:name, '匯出', :money, :balance - $money, :time)");
                 $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':money', $money);
                 $stmt->bindParam(':balance', $row['money']);
+                $stmt->bindParam(':time', $time);
                 $stmt->execute();
                 $msg = "提款成功，帳戶金額：" . ($row['money'] - $money);
             } else {

@@ -46,7 +46,9 @@
               echo "<tr> <td> {$values['action']}: </td>
                          <td> {$values['money']} </td>
                          <td> ( 餘額 : </td>
-                         <td> {$values['balance']}) </td> </tr>";
+                         <td> {$values['balance']}) </td>
+                         <td> ( 時間 : </td>
+                         <td> {$values['time']}) </td></tr>";
           }
           echo "</table></h4>";
       }
