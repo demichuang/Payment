@@ -21,12 +21,22 @@ class IndexController extends Controller
         }
 
         if (isset($_POST["in"])) {
-            $msg = $this->model("SqlCommand")->moneyDeposit($name, $money);
+            if ($money <= 0) {
+                $this->view("index", "輸入錯誤");
+                exit();
+            }
+
+            $msg = $this->model("SqlCommand")->moneyAction($name, $money);
             $this->view("index", $msg);
         }
 
         if (isset($_POST["out"])) {
-            $msg = $this->model("SqlCommand")->moneyWithdraw($name, $money);
+            if ($money <= 0) {
+                $this->view("index", "輸入錯誤");
+                exit();
+            }
+
+            $msg = $this->model("SqlCommand")->moneyAction($name, - $money);
             $this->view("index", $msg);
         }
 
