@@ -1,0 +1,12 @@
+[14-Aug-2016 02:56:48 UTC] PHP Warning:  require_once(models/Connect.php): failed to open stream: No such file or directory in /home/ubuntu/workspace/Payment/Test/Sq.php on line 2
+[14-Aug-2016 02:56:48 UTC] PHP Stack trace:
+[14-Aug-2016 02:56:48 UTC] PHP   1. {main}() /home/ubuntu/workspace/Payment/Test/Sq.php:0
+[14-Aug-2016 02:56:48 UTC] PHP Fatal error:  require_once(): Failed opening required 'models/Connect.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/ubuntu/workspace/Payment/Test/Sq.php on line 2
+[14-Aug-2016 02:56:48 UTC] PHP Stack trace:
+[14-Aug-2016 02:56:48 UTC] PHP   1. {main}() /home/ubuntu/workspace/Payment/Test/Sq.php:0
+[14-Aug-2016 02:57:48 UTC] PHP Fatal error:  Class 'Connect' not found in /home/ubuntu/workspace/Payment/models/Sq.php on line 3
+[14-Aug-2016 02:57:48 UTC] PHP Stack trace:
+[14-Aug-2016 02:57:48 UTC] PHP   1. {main}() /home/ubuntu/workspace/Payment/models/Sq.php:0
+[14-Aug-2016 02:58:19 UTC] PHP Fatal error:  Class 'Connect' not found in /home/ubuntu/workspace/Payment/models/SqlCommand.php on line 4
+[14-Aug-2016 02:58:19 UTC] PHP Stack trace:
+[14-Aug-2016 02:58:19 UTC] PHP   1. {main}() /home/ubuntu/workspace/Payment/models/SqlCommand.php:0
