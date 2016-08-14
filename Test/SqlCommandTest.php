@@ -47,4 +47,16 @@ class SqlCommandTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals($expect, $row);
     }
+
+    // 測試存款
+    public function testDeposit()
+    {
+    	$account = "jj";
+    	$money = 2000;
+
+        $sql = new SqlCommand();
+        $msg = $sql->moneyAction($account, $money);
+
+        $this->assertEquals("存款成功，帳戶金額：4000", $msg);
+    }
 }
