@@ -71,4 +71,16 @@ class SqlCommandTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals("提款成功，帳戶金額：2000", $msg);
     }
+
+    // 測試提款失敗，金額不足
+    public function testWithdrawFail()
+    {
+    	$account = "jj";
+    	$money = -6000;
+
+        $sql = new SqlCommand();
+        $msg = $sql->moneyAction($account, $money);
+
+        $this->assertEquals("提款失敗，金額不足，帳戶金額：2000", $msg);
+    }
 }
