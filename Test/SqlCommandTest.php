@@ -4,6 +4,14 @@ require_once("models/SqlCommand.php");
 
 class SqlCommandTest extends \PHPUnit_Framework_TestCase {
 
+	// 設定account資料來測試
+    public function __construct()
+    {
+        $db = new Connect();
+        $set =$db->db->prepare("UPDATE `user` SET `money` = '2000' WHERE `username` = 'jj'");
+        $set->execute();
+    }
+
 	// 測試檢查是否有此使用者
     public function testCheckUser()
     {
@@ -82,5 +90,14 @@ class SqlCommandTest extends \PHPUnit_Framework_TestCase {
         $msg = $sql->moneyAction($account, $money);
 
         $this->assertEquals("提款失敗，金額不足，帳戶金額：2000", $msg);
+    }
+
+    // 還原account紀錄資料
+    public function __destruct()
+    {
+        $db = new Connect();
+        $returnOrigin =$db->db->prepare("DELETE FROM `record`
+            WHERE `username` = 'jj' AND `id` != '7'");
+        $returnOrigin->execute();
     }
 }
